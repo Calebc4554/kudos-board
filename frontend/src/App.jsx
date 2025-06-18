@@ -27,6 +27,9 @@ function App() {
 
 	const [boards, setBoards] = useState([]);
 
+	const handleViewBoard = (board) => {
+		console.log("Viewing:", board);
+	};
 	const handleCreateBoard = (e) => {
 		e.preventDefault();
 		const newBoard = {
@@ -74,7 +77,7 @@ function App() {
 				))}
 			</nav>
 
-			<BoardList boards={displayBoards} onDelete={handleDeleteBoard} />
+			<BoardList boards={displayBoards} onDelete={handleDeleteBoard} onView={handleViewBoard} />
 
 			<footer className="footer">
 				<p>&copy; 2025 Kudos Board. All rights reserved.</p>
