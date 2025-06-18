@@ -1,5 +1,7 @@
 import React from "react";
 import "./App.css";
+import BoardList from "./BoardList";
+import Modal from "./Modal";
 import { useState } from "react";
 
 function App() {
@@ -72,78 +74,19 @@ function App() {
 				))}
 			</nav>
 
-			<main className="board-list">
-				{displayBoards.map((board) => (
-					<div key={board.id} className="board-item">
-						<img src={board.image} alt={board.title} className="board-image" />
-						<h3>{board.title}</h3>
-						<p>{board.description}</p>
-						<p className="author">By {board.author}</p>
-						{board.id !== 0 && (
-							<button className="delete-button" onClick={() => handleDeleteBoard(board.id)}>
-								Delete
-							</button>
-						)}
-					</div>
-				))}
-			</main>
+			<BoardList boards={displayBoards} onDelete={handleDeleteBoard} />
 
 			<footer className="footer">
 				<p>&copy; 2025 Kudos Board. All rights reserved.</p>
 			</footer>
 
 			{showForm && (
-				<div className="modal-overlay" onClick={() => setShowForm(false)}>
-					<div className="modal-content" onClick={(e) => e.stopPropagation()}>
-						<form className="modal-form" onSubmit={handleCreateBoard}>
-							<h2>Create a New Board</h2>
-							<input
-								type="text"
-								placeholder="Title"
-								value={formData.title}
-								onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-								required
-							/>
-							<textarea
-								placeholder="Description"
-								value={formData.description}
-								onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-								required
-							/>
-							<select
-								value={formData.category}
-								onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-								required
-							>
-								<option value="celebration">Celebration</option>
-								<option value="thank you">Thank You</option>
-								<option value="inspiration">Inspiration</option>
-								<option value="recent">Recent</option>
-							</select>
-							<input
-								type="text"
-								placeholder="Image URL"
-								value={formData.image}
-								onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-								required
-							/>
-							<input
-								type="text"
-								placeholder="Author (optional)"
-								value={formData.author}
-								onChange={(e) => setFormData({ ...formData, author: e.target.value })}
-							/>
-							<div className="modal-buttons">
-								<button type="submit" className="create-button">
-									Create
-								</button>
-								<button type="button" className="delete-button" onClick={() => setShowForm(false)}>
-									Cancel
-								</button>
-							</div>
-						</form>
-					</div>
-				</div>
+				<Modal
+					formData={formData}
+					setFormData={setFormData}
+					onClose={() => setShowForm(false)}
+					onSubmit={handleCreateBoard}
+				/>
 			)}
 		</div>
 	);
