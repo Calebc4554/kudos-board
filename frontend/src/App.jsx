@@ -23,6 +23,29 @@ function App() {
 		category: "inspiration",
 	};
 
+	const [boards, setBoards] = useState([]);
+
+	const handleCreateBoard = (e) => {
+		e.preventDefault();
+		const newBoard = {
+			id: Date.now(),
+			...formData,
+			author: formData.author || "Anonymous",
+		};
+		setBoards([newBoard, ...boards]);
+		setShowForm(false);
+		setFormData({ title: "", description: "", category: "celebration", image: "", author: "" });
+	};
+
+	const handleDeleteBoard = (id) => {
+		setBoards(boards.filter((board) => board.id !== id));
+	};
+
+	const filteredBoards =
+		filter === "all" ? boards : boards.filter((board) => board.category === filter);
+
+	const displayBoards = boards.length > 0 ? filteredBoards : [defaultBoard];
+
 	return (
 		<div className="app">
 			<header className="header">
@@ -50,12 +73,19 @@ function App() {
 			</nav>
 
 			<main className="board-list">
-				<div className="board-item">
-					<img src={defaultBoard.image} alt={defaultBoard.title} className="board-image" />
-					<h3>{defaultBoard.title}</h3>
-					<p>{defaultBoard.description}</p>
-					<p className="author">By {defaultBoard.author}</p>
-				</div>
+				{displayBoards.map((board) => (
+					<div key={board.id} className="board-item">
+						<img src={board.image} alt={board.title} className="board-image" />
+						<h3>{board.title}</h3>
+						<p>{board.description}</p>
+						<p className="author">By {board.author}</p>
+						{board.id !== 0 && (
+							<button className="delete-button" onClick={() => handleDeleteBoard(board.id)}>
+								Delete
+							</button>
+						)}
+					</div>
+				))}
 			</main>
 
 			<footer className="footer">
@@ -63,7 +93,7 @@ function App() {
 			</footer>
 
 			{showForm && (
-				<form className="modal-form" onSubmit={(e) => e.preventDefault()}>
+				<form className="modal-form" onSubmit={handleCreateBoard}>
 					<h2>Create a New Board</h2>
 					<input
 						type="text"
