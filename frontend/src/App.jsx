@@ -18,23 +18,23 @@ function App() {
 			</header>
 
 			<section className="banner">
-				<h2>Celebrate your team 🎉</h2>
+				<h2>Celebrate Your Team 🎉</h2>
 				<p>Create, filter, and manage your kudos boards below.</p>
 				<button className="create-button">+ Create New Board</button>
 			</section>
 
-			<div className="filter-container">
+			<nav className="filter-container">
 				<button className="filter-button active">All</button>
-			</div>
+			</nav>
 
-			<section className="board-list">
+			<main className="board-list">
 				<div className="board-item">
 					<img src={defaultBoard.image} alt={defaultBoard.title} className="board-image" />
 					<h3>{defaultBoard.title}</h3>
 					<p>{defaultBoard.description}</p>
 					<p className="author">By {defaultBoard.author}</p>
 				</div>
-			</section>
+			</main>
 
 			<footer className="footer">
 				<p>&copy; 2025 Kudos Board. All rights reserved.</p>
