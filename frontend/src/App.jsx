@@ -4,6 +4,13 @@ import { useState } from "react";
 
 function App() {
 	const [showForm, setShowForm] = useState(false);
+	const [formData, setFormData] = useState({
+		title: "",
+		description: "",
+		category: "celebration",
+		image: "",
+		author: "",
+	});
 
 	const defaultBoard = {
 		id: 0,
@@ -46,15 +53,53 @@ function App() {
 			</footer>
 
 			{showForm && (
-				<div className="modal-overlay">
-					<div className="modal-form">
-						<h2>Create a New Board</h2>
-						<p>Form goes here...</p>
-						<button className="delete-button" onClick={() => setShowForm(false)}>
-							Close
+				<form className="modal-form" onSubmit={(e) => e.preventDefault()}>
+					<h2>Create a New Board</h2>
+					<input
+						type="text"
+						placeholder="Title"
+						value={formData.title}
+						onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+						required
+					/>
+					<textarea
+						placeholder="Description"
+						value={formData.description}
+						onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+						required
+					/>
+					<select
+						value={formData.category}
+						onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+						required
+					>
+						<option value="celebration">Celebration</option>
+						<option value="thank you">Thank You</option>
+						<option value="inspiration">Inspiration</option>
+						<option value="recent">Recent</option>
+					</select>
+					<input
+						type="text"
+						placeholder="Image URL"
+						value={formData.image}
+						onChange={(e) => setFormData({ ...formData, image: e.target.value })}
+						required
+					/>
+					<input
+						type="text"
+						placeholder="Author (optional)"
+						value={formData.author}
+						onChange={(e) => setFormData({ ...formData, author: e.target.value })}
+					/>
+					<div className="modal-buttons">
+						<button type="submit" className="create-button">
+							Create
+						</button>
+						<button type="button" className="delete-button" onClick={() => setShowForm(false)}>
+							Cancel
 						</button>
 					</div>
-				</div>
+				</form>
 			)}
 		</div>
 	);
