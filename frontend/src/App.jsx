@@ -1,3 +1,4 @@
+// src/App.jsx
 import React, { useState } from "react";
 import "./App.css";
 import BoardList from "./BoardList";
@@ -16,13 +17,40 @@ function App() {
 	const categories = ["all", "recent", "celebration", "thank you", "inspiration"];
 	const [filter, setFilter] = useState("all");
 
+	// Sample default board with cards
 	const defaultBoard = {
 		id: 0,
 		title: "Welcome to Kudos Board",
-		image: "https://picsum.photos/seed/picsum/200/300",
+		image: "https://picsum.photos/seed/picsum/600/400",
 		description: "Start celebrating your teammates by creating a board!",
 		author: "Admin",
 		category: "inspiration",
+		cards: [
+			{
+				id: "c1",
+				title: "First Kudos",
+				description: "You nailed that presentation!",
+				author: "Admin",
+				gif: "https://media.giphy.com/media/3o7aD2saalBwwftBIY/giphy.gif",
+				votes: 0,
+			},
+			{
+				id: "c2",
+				title: "Team Player",
+				description: "Thanks for helping onboard our new teammate.",
+				author: "Admin",
+				gif: "https://media.giphy.com/media/26tOZ42Mg6pbTUPHW/giphy.gif",
+				votes: 0,
+			},
+			{
+				id: "c3",
+				title: "Deadline Crusher",
+				description: "Pulled through on that tight deadline, legendary work!",
+				author: "Admin",
+				gif: "https://media.giphy.com/media/l0HlOvJ7yaacpuSas/giphy.gif",
+				votes: 0,
+			},
+		],
 	};
 
 	const [boards, setBoards] = useState([]);
@@ -58,7 +86,25 @@ function App() {
 	};
 
 	const handleDeleteBoard = (id) => {
-		setBoards(boards.filter((board) => board.id !== id));
+		setBoards(boards.filter((b) => b.id !== id));
+	};
+
+	const updateBoardCards = (updatedCards) => {
+		const updated = { ...selectedBoard, cards: updatedCards };
+		setSelectedBoard(updated);
+		setBoards((prev) => prev.map((b) => (b.id === updated.id ? updated : b)));
+	};
+
+	const handleDeleteCard = (cardId) => {
+		const remaining = (selectedBoard.cards || []).filter((c) => c.id !== cardId);
+		updateBoardCards(remaining);
+	};
+
+	const handleUpvoteCard = (cardId) => {
+		const voted = (selectedBoard.cards || []).map((c) =>
+			c.id === cardId ? { ...c, votes: (c.votes || 0) + 1 } : c
+		);
+		updateBoardCards(voted);
 	};
 
 	const filteredBoards = filter === "all" ? boards : boards.filter((b) => b.category === filter);
@@ -76,7 +122,11 @@ function App() {
 			</header>
 
 			{showDetails ? (
-				<BoardDetails board={selectedBoard} />
+				<BoardDetails
+					board={selectedBoard}
+					onDeleteCard={handleDeleteCard}
+					onUpvoteCard={handleUpvoteCard}
+				/>
 			) : (
 				<>
 					<section className="banner">

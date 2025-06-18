@@ -1,0 +1,46 @@
+.cards-container {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+	gap: 1rem;
+	padding: 1rem;
+}
+
+.card {
+	background: #fff;
+	padding: 1rem;
+	border-radius: 8px;
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+	max-width: 220px;
+	margin: 0 auto;
+	text-align: center;
+	transition: transform 0.2s;
+}
+
+.card:hover {
+	transform: translateY(-4px);
+}
+
+.card-gif {
+	width: 100%;
+	height: auto;
+	border-radius: 4px;
+	margin-bottom: 0.75rem;
+}
+
+.card h3 {
+	font-size: 1.1rem;
+	margin-bottom: 0.5rem;
+	color: #333;
+}
+
+.card p {
+	font-size: 0.9rem;
+	color: #555;
+	margin-bottom: 0.5rem;
+}
+
+.card-author {
+	font-style: italic;
+	color: #666;
+	font-size: 0.85rem;
+}
