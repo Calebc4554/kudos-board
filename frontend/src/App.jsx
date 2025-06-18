@@ -1,7 +1,10 @@
 import React from "react";
 import "./App.css";
+import { useState } from "react";
 
 function App() {
+	const [showForm, setShowForm] = useState(false);
+
 	const defaultBoard = {
 		id: 0,
 		title: "Welcome to Kudos Board",
@@ -20,7 +23,9 @@ function App() {
 			<section className="banner">
 				<h2>Celebrate Your Team 🎉</h2>
 				<p>Create, filter, and manage your kudos boards below.</p>
-				<button className="create-button">+ Create New Board</button>
+				<button className="create-button" onClick={() => setShowForm(true)}>
+					+ Create New Board
+				</button>
 			</section>
 
 			<nav className="filter-container">
@@ -39,6 +44,18 @@ function App() {
 			<footer className="footer">
 				<p>&copy; 2025 Kudos Board. All rights reserved.</p>
 			</footer>
+
+			{showForm && (
+				<div className="modal-overlay">
+					<div className="modal-form">
+						<h2>Create a New Board</h2>
+						<p>Form goes here...</p>
+						<button className="delete-button" onClick={() => setShowForm(false)}>
+							Close
+						</button>
+					</div>
+				</div>
+			)}
 		</div>
 	);
 }
