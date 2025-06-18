@@ -32,7 +32,12 @@ body {
 	background-color: #fff;
 	color: #4db8ff;
 	border-radius: 6px;
-	cursor: not-allowed;
+	cursor: pointer;
+	transition: background-color 0.2s ease;
+}
+
+.create-button:hover {
+	background-color: #e0f3ff;
 }
 
 .filter-container {
@@ -51,6 +56,11 @@ body {
 	border-radius: 6px;
 	cursor: pointer;
 	font-size: 0.9rem;
+	transition: background-color 0.2s ease;
+}
+
+.filter-button:hover {
+	background-color: #f0f0f0;
 }
 
 .filter-button.active {
@@ -87,6 +97,22 @@ body {
 .author {
 	font-size: 0.85rem;
 	color: #555;
+	margin-top: 0.5rem;
+}
+
+.delete-button {
+	margin-top: 0.5rem;
+	padding: 0.4rem 1rem;
+	border: none;
+	background-color: #ff5c5c;
+	color: white;
+	border-radius: 6px;
+	cursor: pointer;
+	transition: background-color 0.2s ease;
+}
+
+.delete-button:hover {
+	background-color: #ff1e1e;
 }
 
 .footer {
@@ -94,4 +120,61 @@ body {
 	color: white;
 	padding: 1rem;
 	text-align: center;
+}
+
+.modal-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.6);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	z-index: 1000;
+}
+
+.modal-content {
+	background-color: white;
+	padding: 2rem;
+	border-radius: 10px;
+	width: 90%;
+	max-width: 500px;
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+	animation: fadeIn 0.25s ease-out;
+}
+
+.modal-form {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+
+.modal-form input,
+.modal-form textarea,
+.modal-form select {
+	padding: 0.6rem;
+	font-size: 1rem;
+	border: 1px solid #ccc;
+	border-radius: 6px;
+	resize: none;
+}
+
+.modal-buttons {
+	display: flex;
+	justify-content: space-between;
+	gap: 1rem;
+	margin-top: 1rem;
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+		transform: scale(0.95);
+	}
+	to {
+		opacity: 1;
+		transform: scale(1);
+	}
 }
