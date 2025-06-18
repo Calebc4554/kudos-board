@@ -11,6 +11,8 @@ function App() {
 		image: "",
 		author: "",
 	});
+	const categories = ["all", "recent", "celebration", "thank you", "inspiration"];
+	const [filter, setFilter] = useState("all");
 
 	const defaultBoard = {
 		id: 0,
@@ -36,7 +38,15 @@ function App() {
 			</section>
 
 			<nav className="filter-container">
-				<button className="filter-button active">All</button>
+				{categories.map((cat) => (
+					<button
+						key={cat}
+						className={`filter-button ${filter === cat ? "active" : ""}`}
+						onClick={() => setFilter(cat)}
+					>
+						{cat.charAt(0).toUpperCase() + cat.slice(1)}
+					</button>
+				))}
 			</nav>
 
 			<main className="board-list">
