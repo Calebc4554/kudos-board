@@ -1,6 +1,5 @@
 body {
 	margin: 0;
-	padding: 0;
 	font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 	background-color: #f5f7fa;
 }
@@ -18,49 +17,76 @@ body {
 	text-align: center;
 }
 
-.search-container {
-	padding: 1rem;
+.banner {
+	background-color: #4db8ff;
+	color: white;
+	padding: 2rem;
 	text-align: center;
+}
+
+.create-button {
+	margin-top: 1rem;
+	padding: 0.5rem 1.2rem;
+	font-size: 1rem;
+	border: none;
+	background-color: #fff;
+	color: #4db8ff;
+	border-radius: 6px;
+	cursor: not-allowed;
+}
+
+.filter-container {
+	display: flex;
+	justify-content: center;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+	padding: 1rem;
 	background-color: #ffffff;
 }
 
-.search-input {
-	width: 60%;
-	max-width: 500px;
+.filter-button {
 	padding: 0.5rem 1rem;
-	font-size: 1rem;
 	border: 1px solid #ccc;
-	border-radius: 8px;
+	background: white;
+	border-radius: 6px;
+	cursor: pointer;
+	font-size: 0.9rem;
+}
+
+.filter-button.active {
+	background-color: #4db8ff;
+	color: white;
+	border-color: #4db8ff;
 }
 
 .board-list {
 	flex: 1;
 	padding: 1rem;
 	display: flex;
-	flex-direction: column;
-	align-items: center;
+	flex-wrap: wrap;
+	gap: 1rem;
+	justify-content: center;
 }
 
 .board-item {
 	background-color: white;
 	padding: 1rem;
-	margin: 0.5rem;
-	width: 80%;
-	max-width: 600px;
-	text-align: center;
+	width: 300px;
 	border-radius: 10px;
 	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-	transition: 0.2s ease;
+	text-align: center;
 }
 
-.board-item:hover {
-	transform: translateY(-3px);
-	background-color: #e9f5ff;
+.board-image {
+	width: 100%;
+	height: 150px;
+	object-fit: cover;
+	border-radius: 6px;
 }
 
-.no-results {
-	color: #888;
-	margin-top: 1rem;
+.author {
+	font-size: 0.85rem;
+	color: #555;
 }
 
 .footer {
