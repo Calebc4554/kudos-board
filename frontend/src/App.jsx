@@ -2,8 +2,9 @@
 import React, { useState } from "react";
 import "./App.css";
 import BoardList from "./BoardList";
-import BoardDetails from "./BoardDetails";
-import Modal from "./Modal";
+import Cards from "./Cards";
+import CreateBoardModal from "./CreateBoardModal";
+import CreateCardModal from "./CreateCardModal";
 
 function App() {
 	const [showForm, setShowForm] = useState(false);
@@ -16,6 +17,13 @@ function App() {
 	});
 	const categories = ["all", "recent", "celebration", "thank you", "inspiration"];
 	const [filter, setFilter] = useState("all");
+	const [showCardModal, setShowCardModal] = useState(false);
+	const [cardFormData, setCardFormData] = useState({
+		title: "",
+		description: "",
+		gif: "",
+		author: "",
+	});
 
 	// Sample default board with cards
 	const defaultBoard = {
@@ -56,6 +64,20 @@ function App() {
 	const [boards, setBoards] = useState([]);
 	const [selectedBoard, setSelectedBoard] = useState(null);
 	const [showDetails, setShowDetails] = useState(false);
+
+	const handleAddCard = (boardId, newCardData) => {
+		const newCard = {
+			id: Date.now().toString(),
+			votes: 0,
+			...newCardData,
+		};
+		const updated = {
+			...selectedBoard,
+			cards: [...(selectedBoard.cards || []), newCard],
+		};
+		setSelectedBoard(updated);
+		setBoards((bs) => bs.map((b) => (b.id === boardId ? updated : b)));
+	};
 
 	const handleViewBoard = (board) => {
 		setSelectedBoard(board);
@@ -115,14 +137,19 @@ function App() {
 			<header className="header">
 				<h1>Kudos Board</h1>
 				{showDetails && (
-					<button className="back-button" onClick={handleBack}>
-						← Back to Boards
-					</button>
+					<>
+						<button className="back-button" onClick={handleBack}>
+							← Back to Boards
+						</button>
+						<button className="create-card-button" onClick={() => setShowCardModal(true)}>
+							+ Add Card
+						</button>
+					</>
 				)}
 			</header>
 
 			{showDetails ? (
-				<BoardDetails
+				<Cards
 					board={selectedBoard}
 					onDeleteCard={handleDeleteCard}
 					onUpvoteCard={handleUpvoteCard}
@@ -158,11 +185,28 @@ function App() {
 			</footer>
 
 			{showForm && (
-				<Modal
+				<CreateBoardModal
 					formData={formData}
 					setFormData={setFormData}
 					onClose={() => setShowForm(false)}
 					onSubmit={handleCreateBoard}
+				/>
+			)}
+
+			{showCardModal && (
+				<CreateCardModal
+					formData={cardFormData}
+					setFormData={setCardFormData}
+					onClose={() => {
+						setShowCardModal(false);
+						setCardFormData({ title: "", description: "", gif: "", author: "" });
+					}}
+					onSubmit={(e) => {
+						e.preventDefault();
+						handleAddCard(selectedBoard.id, cardFormData);
+						setShowCardModal(false);
+						setCardFormData({ title: "", description: "", gif: "", author: "" });
+					}}
 				/>
 			)}
 		</div>

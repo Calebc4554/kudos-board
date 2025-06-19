@@ -1,5 +1,5 @@
 import React from "react";
-import "./BoardDetails.css";
+import "./Cards.css";
 
 function BoardDetails({ board, onDeleteCard, onUpvoteCard }) {
 	if (!board?.cards?.length) return <p className="no-cards">No cards to display</p>;
