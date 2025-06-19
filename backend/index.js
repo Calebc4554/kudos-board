@@ -12,7 +12,6 @@ const PORT = process.env.PORT || 5050;
 app.use(cors());
 app.use(express.json());
 
-
 // GET all boards
 app.get("/boards", async (req, res) => {
 	try {
@@ -68,6 +67,62 @@ app.delete("/boards/:boardId", async (req, res) => {
 	}
 });
 
+// GET all cards for a given board
+app.get("/boards/:boardId/cards", async (req, res) => {
+	const boardId = Number(req.params.boardId);
+	try {
+		const cards = await prisma.card.findMany({
+			where: { board_id: boardId },
+			orderBy: { created_at: "desc" },
+		});
+		res.json(cards);
+	} catch (err) {
+		console.error(`GET /boards/${boardId}/cards:`, err);
+		res.status(500).json({ error: "Failed to fetch cards" });
+	}
+});
+
+// GET one card by board + card ID
+app.get("/boards/:boardId/cards/:cardId", async (req, res) => {
+	const boardId = Number(req.params.boardId);
+	const cardId = Number(req.params.cardId);
+	try {
+		const carzd = await prisma.card.findFirst({
+			where: { id: cardId, board_id: boardId },
+		});
+		if (!card) {
+			return res.status(404).json({ error: "Card not found on that board" });
+		}
+		res.json(card);
+	} catch (err) {
+		console.error(`GET /boards/${boardId}/cards/${cardId}:`, err);
+		res.status(500).json({ error: "Failed to fetch card" });
+	}
+});
+
+// POST (create) a card under a given board
+app.post("/boards/:boardId/cards", async (req, res) => {
+	const boardId = Number(req.params.boardId);
+	const { title, description, gif_url, author } = req.body;
+	if (!title || !description || !gif_url) {
+		return res.status(400).json({ error: "Missing required fields: title, description, gif_url" });
+	}
+	try {
+		const card = await prisma.card.create({
+			data: {
+				board_id: boardId,
+				title,
+				description,
+				gif_url,
+				author: author || "Anonymous",
+			},
+		});
+		res.status(201).json(card);
+	} catch (err) {
+		console.error(`POST /boards/${boardId}/cards:`, err);
+		res.status(500).json({ error: "Failed to add card" });
+	}
+});
 
 app.listen(PORT, () => {
 	console.log(`Server listening on http://localhost:${PORT}`);
