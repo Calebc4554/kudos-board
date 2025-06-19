@@ -71,10 +71,14 @@ app.delete("/boards/:boardId", async (req, res) => {
 app.get("/boards/:boardId/cards", async (req, res) => {
 	const boardId = Number(req.params.boardId);
 	try {
-		const cards = await prisma.card.findMany({
+		const rawCards = await prisma.card.findMany({
 			where: { board_id: boardId },
 			orderBy: { created_at: "desc" },
 		});
+		const cards = rawCards.map((card, idx) => ({
+			...card,
+			id: idx + 1,
+		}));
 		res.json(cards);
 	} catch (err) {
 		console.error(`GET /boards/${boardId}/cards:`, err);
