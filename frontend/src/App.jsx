@@ -12,6 +12,7 @@ export default function App() {
 	const [selectedBoard, setSelectedBoard] = useState(null);
 	const [filter, setFilter] = useState("all");
 	const [searchTerm, setSearchTerm] = useState("");
+	const [searchQuery, setSearchQuery] = useState("");
 
 	const [showForm, setShowForm] = useState(false);
 	const [showCardModal, setShowCardModal] = useState(false);
@@ -151,22 +152,37 @@ export default function App() {
 		}
 	};
 
-	let filteredBoards;
+	// 1) filter by category (including “recent”)
+	let filteredByCategory;
 	if (filter === "all") {
-		filteredBoards = boards;
+		filteredByCategory = boards;
 	} else if (filter === "recent") {
-		filteredBoards = [...boards]
+		filteredByCategory = [...boards]
 			.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
 			.slice(0, 6);
 	} else {
-		filteredBoards = boards.filter((b) => b.category === filter);
+		filteredByCategory = boards.filter((b) => b.category === filter);
 	}
 
-	const displayBoards = filteredBoards.filter(
+	// 2) then filter by the *submitted* searchQuery
+	const displayBoards = filteredByCategory.filter(
 		(b) =>
-			b.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-			b.description.toLowerCase().includes(searchTerm.toLowerCase())
+			b.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+			b.description.toLowerCase().includes(searchQuery.toLowerCase())
 	);
+
+	// ——— all your handlers (create/delete/view boards & cards, etc.) go here ———
+
+	// NEW: search form submit
+	const handleSearchSubmit = (e) => {
+		e.preventDefault();
+		setSearchQuery(searchTerm.trim());
+	};
+	// NEW: clear search
+	const handleClearSearch = () => {
+		setSearchTerm("");
+		setSearchQuery("");
+	};
 
 	return (
 		<div className="app">
@@ -205,15 +221,21 @@ export default function App() {
 							</button>
 						))}
 					</nav>
-					<div className="search-container">
+					<form className="search-container" onSubmit={handleSearchSubmit}>
 						<input
-							className="search-input"
 							type="text"
+							className="search-input"
 							placeholder="Search boards..."
 							value={searchTerm}
 							onChange={(e) => setSearchTerm(e.target.value)}
 						/>
-					</div>
+						<button type="submit" className="create-button">
+							Search
+						</button>
+						<button type="button" className="create-button" onClick={handleClearSearch}>
+							Clear
+						</button>
+					</form>
 				</section>
 			)}
 
