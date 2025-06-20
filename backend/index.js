@@ -165,6 +165,27 @@ app.delete("/cards/:cardId", async (req, res) => {
 	}
 });
 
+app.get("/cards/:cardId/comments", async (req, res) => {
+	const cardId = Number(req.params.cardId);
+	const comments = await prisma.comment.findMany({
+		where: { card_id: cardId },
+		orderBy: { created_at: "asc" },
+	});
+	res.json(comments);
+});
+
+// POST a new comment
+app.post("/cards/:cardId/comments", async (req, res) => {
+	const cardId = Number(req.params.cardId);
+	const { message, author } = req.body;
+	if (!message) return res.status(400).json({ error: "Message required" });
+
+	const comment = await prisma.comment.create({
+		data: { card_id: cardId, message, author },
+	});
+	res.status(201).json(comment);
+});
+
 // ——— CATCH-ALL 404 ——— //
 app.use((req, res) => res.status(404).json({ error: "Not found" }));
 
