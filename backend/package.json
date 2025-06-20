@@ -6,7 +6,7 @@
 	"scripts": {
 		"start": "node index.js",
 		"dev": "nodemon index.js",
-    "seed": "npx prisma db seed",
+		"seed": "node prisma/seed.js",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"prisma": {
@@ -17,10 +17,12 @@
 	"license": "ISC",
 	"description": "",
 	"dependencies": {
+		"@faker-js/faker": "^9.8.0",
 		"@prisma/client": "^6.10.1",
 		"cors": "^2.8.5",
 		"dotenv": "^16.5.0",
 		"express": "^5.1.0",
+		"node-fetch": "^3.3.2",
 		"pg": "^8.16.1"
 	},
 	"devDependencies": {
