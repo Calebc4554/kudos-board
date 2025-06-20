@@ -11,6 +11,7 @@ export default function App() {
 	const [boards, setBoards] = useState([]);
 	const [selectedBoard, setSelectedBoard] = useState(null);
 	const [filter, setFilter] = useState("all");
+	const [searchTerm, setSearchTerm] = useState("");
 
 	const [showForm, setShowForm] = useState(false);
 	const [showCardModal, setShowCardModal] = useState(false);
@@ -152,6 +153,13 @@ export default function App() {
 
 	const filteredBoards = filter === "all" ? boards : boards.filter((b) => b.category === filter);
 
+	const byCategory = filter === "all" ? boards : boards.filter((b) => b.category === filter);
+	const displayBoards = byCategory.filter(
+		(b) =>
+			b.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+			b.description.toLowerCase().includes(searchTerm.toLowerCase())
+	);
+
 	return (
 		<div className="app">
 			<header className="header">
@@ -168,14 +176,8 @@ export default function App() {
 				)}
 			</header>
 
-			{selectedBoard ? (
-				<Cards
-					board={selectedBoard}
-					onUpvoteCard={handleUpvoteCard}
-					onDeleteCard={handleDeleteCard}
-				/>
-			) : (
-				<>
+			{!selectedBoard && (
+				<section className="controls">
 					<section className="banner">
 						<h2>Celebrate Your Team 🎉</h2>
 						<p>Create, filter, and manage your kudos boards below.</p>
@@ -195,13 +197,26 @@ export default function App() {
 							</button>
 						))}
 					</nav>
+					<div className="search-container">
+						<input
+							className="search-input"
+							type="text"
+							placeholder="Search boards..."
+							value={searchTerm}
+							onChange={(e) => setSearchTerm(e.target.value)}
+						/>
+					</div>
+				</section>
+			)}
 
-					<BoardList
-						boards={filteredBoards}
-						onDelete={handleDeleteBoard}
-						onView={handleViewBoard}
-					/>
-				</>
+			{selectedBoard ? (
+				<Cards
+					board={selectedBoard}
+					onUpvoteCard={handleUpvoteCard}
+					onDeleteCard={handleDeleteCard}
+				/>
+			) : (
+				<BoardList boards={displayBoards} onDelete={handleDeleteBoard} onView={handleViewBoard} />
 			)}
 
 			<footer className="footer">
