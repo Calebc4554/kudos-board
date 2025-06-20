@@ -44,3 +44,63 @@
 	color: #666;
 	font-size: 0.85rem;
 }
+
+/* Cards.css */
+.modal-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(0, 0, 0, 0.5);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 1000;
+}
+
+.card-modal {
+	background: white;
+	padding: 2rem;
+	border-radius: 8px;
+	max-width: 500px;
+	width: 90%;
+	position: relative;
+	max-height: 90vh;
+	overflow-y: auto;
+}
+
+.close-button {
+	position: absolute;
+	top: 0.5rem;
+	right: 0.5rem;
+	background: none;
+	border: none;
+	font-size: 1.5rem;
+	cursor: pointer;
+}
+
+.card-gif-large {
+	max-width: 100%;
+	border-radius: 6px;
+}
+
+.comments-section {
+	margin-top: 1.5rem;
+}
+
+.comment-form textarea {
+	width: 100%;
+	height: 4rem;
+	margin-bottom: 0.5rem;
+}
+
+.comment-form input {
+	width: 100%;
+	margin-bottom: 0.5rem;
+	padding: 0.4rem;
+}
+
+.comment-form button {
+	padding: 0.5rem 1rem;
+}
