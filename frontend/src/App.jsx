@@ -151,10 +151,18 @@ export default function App() {
 		}
 	};
 
-	const filteredBoards = filter === "all" ? boards : boards.filter((b) => b.category === filter);
+	let filteredBoards;
+	if (filter === "all") {
+		filteredBoards = boards;
+	} else if (filter === "recent") {
+		filteredBoards = [...boards]
+			.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+			.slice(0, 6);
+	} else {
+		filteredBoards = boards.filter((b) => b.category === filter);
+	}
 
-	const byCategory = filter === "all" ? boards : boards.filter((b) => b.category === filter);
-	const displayBoards = byCategory.filter(
+	const displayBoards = filteredBoards.filter(
 		(b) =>
 			b.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
 			b.description.toLowerCase().includes(searchTerm.toLowerCase())
