@@ -1,8 +1,11 @@
 ## Unit Assignment: Kudos Board
 
+### TLDR
+Magma Board (Kudos Board) is a web app where users can create, view, search, filter, and delete themed “boards” of messages with GIFs. The home page shows a grid of boards, a search bar, and filters (all, recent, celebration, thank you, inspiration). Clicking a board reveals its cards, which you can add, upvote, comment on, pin, or delete. Light/dark mode toggles persist across pages and reloads. Deployed on Render with a video walkthrough available.
+
 Submitted by: **Caleb Calderon**
 
-Deployed Application (**required**): [Kudos Board Deployed Site](https://kudos-board-frontend-81nv.onrender.com/)
+Deployed Application: [Kudos Board Deployed Site](https://kudos-board-frontend-81nv.onrender.com/)
 
 ### Application Features
 
