@@ -1,129 +1,144 @@
-:root {
-	--magma-bg: #2a0c13;
-	--magma-border: #800000;
-	--magma-glow: rgba(255, 69, 0, 0.6);
-	--text-primary: #ffe8c4;
-	--text-secondary: #d3ab82;
-	--button-bg: #ff4500;
-	--button-hover: #ff6a33;
-}
-
+/* Cards container */
 .cards-container {
 	display: flex;
-	gap: 1rem;
-	padding: 1rem;
-	background: var(--magma-bg);
-	box-shadow: inset 0 0 20px var(--magma-glow);
 	flex-wrap: wrap;
+	justify-content: center;
+	gap: 1.2rem;
+	padding: 1.2rem;
+	background: var(--card-bg);
+	box-shadow: inset 0 0 20px var(--magma-glow);
 }
 
+/* Card */
 .card {
-	background: var(--magma-bg);
-	color: var(--text-primary);
-	padding: 1rem;
-	border-radius: 8px;
-	border: 1px solid var(--magma-border);
-	max-width: 220px;
-	margin: 0 auto;
-	text-align: center;
-	transition: transform 0.2s, box-shadow 0.2s;
+	max-width: 240px;
+	margin: 0.5rem;
+	padding: 1.2rem 1rem 1rem 1rem;
+	background-color: var(--surface);
+	color: var(--text);
+	border-radius: 10px;
+	border: 1px solid var(--accent-dark);
+	box-shadow: 0 0 12px var(--magma-glow);
+	text-align: left;
+	transition: box-shadow 0.2s, transform 0.15s;
 }
 .card:hover {
-	transform: translateY(-4px);
-	box-shadow: 0 0 20px var(--magma-glow);
+	box-shadow: 0 0 24px var(--magma-glow);
+	transform: translateY(-3px) scale(1.03);
 }
 
+/* Card image */
 .card-gif {
 	width: 100%;
-	height: 200px;
+	height: 180px;
 	object-fit: cover;
-	border-radius: 4px;
-	border: 1px solid var(--magma-border);
+	border-radius: 6px;
+	border: 1px solid var(--accent-dark);
 	box-shadow: inset 0 0 8px var(--magma-glow);
-	margin-bottom: 0.75rem;
+	margin-bottom: 0.7rem;
 }
 
+/* Card title */
 .card h3 {
-	font-size: 1.1rem;
-	margin-bottom: 0.5rem;
-	color: var(--text-primary);
+	font-size: 1.15rem;
+	margin-bottom: 0.4rem;
+	color: var(--accent);
 }
+
+/* Card description */
 .card p {
-	font-size: 0.9rem;
+	font-size: 0.95rem;
 	color: var(--text-secondary);
-	margin-bottom: 0.5rem;
+	margin-bottom: 0.4rem;
 }
+
+/* Card author */
 .card-author {
 	font-style: italic;
-	color: var(--text-secondary);
 	font-size: 0.85rem;
-	margin-bottom: 0.75rem;
+	margin-bottom: 0.7rem;
+	color: var(--text-secondary);
 }
 
+/* Card action buttons */
 .card button {
-	display: inline-block;
-	margin: 0.25rem;
-	padding: 0.4rem 1rem;
-	background-color: var(--button-bg);
-	color: #100509;
+	padding: 0.4rem 1.1rem;
+	margin: 0.2rem 0.1rem;
+	background: var(--accent);
+	color: var(--surface);
 	border: none;
 	border-radius: 6px;
 	box-shadow: 0 0 8px var(--magma-glow);
 	cursor: pointer;
-	transition: background-color 0.2s, box-shadow 0.2s, transform 0.1s;
+	font-weight: 600;
+	transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
 }
 .card button:hover {
-	background-color: var(--button-hover);
+	background: var(--accent-hover);
 	box-shadow: 0 0 16px var(--magma-glow);
 	transform: translateY(-2px);
 }
 
+/* Pin styles */
+.card.pinned {
+	border: 2px solid var(--accent);
+	box-shadow: 0 0 20px 6px var(--magma-glow);
+	background: #a40404;
+}
+.pin-button.pinned {
+	background: var(--accent);
+	color: var(--surface);
+	border: none;
+	border-radius: 50%;
+	padding: 0.5rem;
+	box-shadow: 0 0 12px var(--magma-glow);
+	cursor: pointer;
+}
+
+/* Modal overlay and content */
 .modal-overlay {
 	position: fixed;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
+	inset: 0;
 	background: rgba(0, 0, 0, 0.8);
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	z-index: 1000;
 }
-
 .card-modal {
-	background: var(--magma-bg);
-	color: var(--text-primary);
-	padding: 2rem;
-	border-radius: 8px;
-	border: 1px solid var(--magma-border);
+	background: var(--surface);
+	color: var(--text);
+	padding: 2rem 1.5rem;
+	border-radius: 10px;
+	border: 1px solid var(--accent-dark);
 	box-shadow: 0 0 20px var(--magma-glow);
-	max-width: 500px;
-	width: 90%;
+	max-width: 480px;
+	width: 95%;
 	max-height: 90vh;
 	overflow-y: auto;
 	position: relative;
 }
-
 .close-button {
 	position: absolute;
-	top: 0.5rem;
-	right: 0.5rem;
+	top: 0.7rem;
+	right: 0.7rem;
 	background: transparent;
 	border: none;
-	color: var(--text-primary);
+	color: var(--accent);
 	font-size: 1.5rem;
 	cursor: pointer;
 }
 
+/* Large gif in modal */
 .card-gif-large {
 	max-width: 100%;
-	border-radius: 6px;
-	border: 1px solid var(--magma-border);
+	border-radius: 8px;
+	border: 1px solid var(--accent-dark);
 	box-shadow: inset 0 0 8px var(--magma-glow);
 	margin-bottom: 1rem;
 }
 
+/* Comments section */
 .comments-section {
 	margin-top: 1.5rem;
 }
@@ -132,39 +147,23 @@
 	width: 100%;
 	margin-bottom: 0.5rem;
 	padding: 0.5rem;
-	background: var(--magma-bg);
-	border: 1px solid var(--magma-border);
+	background: var(--surface);
+	border: 1px solid var(--accent-dark);
 	border-radius: 4px;
-	color: var(--text-primary);
+	color: var(--text);
 	resize: vertical;
 }
 .comment-form button {
 	padding: 0.6rem 1.2rem;
-	background-color: var(--button-bg);
-	color: #100509;
+	background: var(--accent);
+	color: var(--surface);
 	border: none;
 	border-radius: 6px;
 	box-shadow: 0 0 12px var(--magma-glow);
 	cursor: pointer;
-	transition: background-color 0.2s, box-shadow 0.2s;
+	transition: background 0.2s, box-shadow 0.2s;
 }
 .comment-form button:hover {
-	background-color: var(--button-hover);
+	background: var(--accent-hover);
 	box-shadow: 0 0 20px var(--magma-glow);
-}
-
-.card.pinned {
-	border: 2px solid var(--magma-glow);
-	box-shadow: 0 0 20px 6px var(--magma-glow);
-	background-color: rgb(164, 4, 4);
-}
-
-.pin-button.pinned {
-	background: var(--button-bg);
-	color: #100509;
-	border: none;
-	border-radius: 50%;
-	padding: 0.5rem;
-	box-shadow: 0 0 12px var(--magma-glow);
-	cursor: pointer;
 }
