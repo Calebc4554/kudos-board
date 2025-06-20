@@ -1,4 +1,3 @@
-/* Cards container */
 .cards-container {
 	display: flex;
 	flex-wrap: wrap;
@@ -9,7 +8,6 @@
 	box-shadow: inset 0 0 20px var(--magma-glow);
 }
 
-/* Card */
 .card {
 	max-width: 240px;
 	margin: 0.5rem;
@@ -27,7 +25,6 @@
 	transform: translateY(-3px) scale(1.03);
 }
 
-/* Card image */
 .card-gif {
 	width: 100%;
 	height: 180px;
@@ -38,21 +35,18 @@
 	margin-bottom: 0.7rem;
 }
 
-/* Card title */
 .card h3 {
 	font-size: 1.15rem;
 	margin-bottom: 0.4rem;
 	color: var(--accent);
 }
 
-/* Card description */
 .card p {
 	font-size: 0.95rem;
 	color: var(--text-secondary);
 	margin-bottom: 0.4rem;
 }
 
-/* Card author */
 .card-author {
 	font-style: italic;
 	font-size: 0.85rem;
@@ -60,7 +54,6 @@
 	color: var(--text-secondary);
 }
 
-/* Card action buttons */
 .card button {
 	padding: 0.4rem 1.1rem;
 	margin: 0.2rem 0.1rem;
@@ -79,7 +72,6 @@
 	transform: translateY(-2px);
 }
 
-/* Pin styles */
 .card.pinned {
 	border: 2px solid var(--accent);
 	box-shadow: 0 0 20px 6px var(--magma-glow);
@@ -95,7 +87,6 @@
 	cursor: pointer;
 }
 
-/* Modal overlay and content */
 .modal-overlay {
 	position: fixed;
 	inset: 0;
@@ -118,6 +109,7 @@
 	overflow-y: auto;
 	position: relative;
 }
+
 .close-button {
 	position: absolute;
 	top: 0.7rem;
@@ -129,7 +121,6 @@
 	cursor: pointer;
 }
 
-/* Large gif in modal */
 .card-gif-large {
 	max-width: 100%;
 	border-radius: 8px;
@@ -138,7 +129,6 @@
 	margin-bottom: 1rem;
 }
 
-/* Comments section */
 .comments-section {
 	margin-top: 1.5rem;
 }
