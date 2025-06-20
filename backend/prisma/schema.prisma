@@ -29,4 +29,15 @@ model Card {
   created_at  DateTime @default(now())
 
   board       Board    @relation(fields: [board_id], references: [id], onDelete: Cascade)
+  comments    Comment[]
+}
+
+model Comment {
+  id         Int      @id @default(autoincrement())
+  card_id    Int
+  message    String
+  author     String?  
+  created_at DateTime @default(now())
+
+  card       Card     @relation(fields: [card_id], references: [id], onDelete: Cascade)
 }
