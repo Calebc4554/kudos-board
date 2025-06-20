@@ -220,69 +220,80 @@ export default function App() {
 
 	return (
 		<div className="app">
-			<header className="header">
-				<h1>Kudos Board</h1>
-				{selectedBoard && (
-					<>
-						<button className="back-button" onClick={handleBack}>
-							← Back to Boards
-						</button>
-						<button className="create-card-button" onClick={() => setShowCardModal(true)}>
-							+ Add Card
-						</button>
-					</>
-				)}
-			</header>
+			<div className="top-container">
+				<header className="header">
+					<h1>Kudos Board</h1>
 
-			{!selectedBoard && (
-				<section className="controls">
-					<section className="banner">
-						<h2>Celebrate Your Team 🎉</h2>
-						<p>Create, filter, and manage your kudos boards below.</p>
-						<button className="create-button" onClick={() => setShowForm(true)}>
-							+ Create New Board
-						</button>
-					</section>
-
-					<nav className="filter-container">
-						{categories.map((cat) => (
-							<button
-								key={cat}
-								className={`filter-button ${filter === cat ? "active" : ""}`}
-								onClick={() => setFilter(cat)}
-							>
-								{cat.charAt(0).toUpperCase() + cat.slice(1)}
+					{selectedBoard && (
+						<div className="header-actions">
+							<button type="button" className="back-button" onClick={handleBack}>
+								← Back to Boards
 							</button>
-						))}
-					</nav>
-					<form className="search-container" onSubmit={handleSearchSubmit}>
-						<input
-							type="text"
-							className="search-input"
-							placeholder="Search boards..."
-							value={searchTerm}
-							onChange={(e) => setSearchTerm(e.target.value)}
-						/>
-						<button type="submit" className="create-button">
-							Search
-						</button>
-						<button type="button" className="create-button" onClick={handleClearSearch}>
-							Clear
-						</button>
-					</form>
-				</section>
-			)}
+							<button
+								type="button"
+								className="create-card-button"
+								onClick={() => setShowCardModal(true)}
+							>
+								+ Add Card
+							</button>
+						</div>
+					)}
+				</header>
 
-			{selectedBoard ? (
-				<Cards
-					board={selectedBoard}
-					onUpvoteCard={handleUpvoteCard}
-					onDeleteCard={handleDeleteCard}
-					onTogglePin={handleTogglePin}
-				/>
-			) : (
-				<BoardList boards={displayBoards} onDelete={handleDeleteBoard} onView={handleViewBoard} />
-			)}
+				{!selectedBoard && (
+					<div className="controls">
+						<section className="banner">
+							<h2>Celebrate Your Team 🎉</h2>
+							<p>Create, filter, and manage your kudos boards below.</p>
+							<button type="button" className="create-button" onClick={() => setShowForm(true)}>
+								+ Create New Board
+							</button>
+						</section>
+
+						<nav className="filter-container" aria-label="Board categories">
+							{categories.map((cat) => (
+								<button
+									key={cat}
+									type="button"
+									className={`filter-button ${filter === cat ? "active" : ""}`}
+									onClick={() => setFilter(cat)}
+								>
+									{cat.charAt(0).toUpperCase() + cat.slice(1)}
+								</button>
+							))}
+						</nav>
+
+						<form className="search-container" onSubmit={handleSearchSubmit} role="search">
+							<input
+								type="text"
+								className="search-input"
+								placeholder="Search boards..."
+								value={searchTerm}
+								onChange={(e) => setSearchTerm(e.target.value)}
+							/>
+							<button type="submit" className="create-button">
+								Search
+							</button>
+							<button type="button" className="create-button" onClick={handleClearSearch}>
+								Clear
+							</button>
+						</form>
+					</div>
+				)}
+			</div>
+
+			<main className="content-area">
+				{selectedBoard ? (
+					<Cards
+						board={selectedBoard}
+						onUpvoteCard={handleUpvoteCard}
+						onDeleteCard={handleDeleteCard}
+						onTogglePin={handleTogglePin}
+					/>
+				) : (
+					<BoardList boards={displayBoards} onDelete={handleDeleteBoard} onView={handleViewBoard} />
+				)}
+			</main>
 
 			<footer className="footer">
 				<p>© 2025 Kudos Board. All rights reserved.</p>
