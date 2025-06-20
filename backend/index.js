@@ -67,17 +67,15 @@ app.delete("/boards/:boardId", async (req, res) => {
 	}
 });
 
-// GET all cards for a given board
 app.get("/boards/:boardId/cards", async (req, res) => {
 	const boardId = Number(req.params.boardId);
 	try {
-		const rawCards = await prisma.card.findMany({
-			where: { board_id: boardId },
-			orderBy: { created_at: "desc" },
-		});
 		const cards = await prisma.card.findMany({
 			where: { board_id: boardId },
-			orderBy: { created_at: "desc" },
+			orderBy: [
+				{ pinned_at: "desc" }, 
+				{ created_at: "desc" }, 
+			],
 		});
 		res.json(cards);
 	} catch (err) {
@@ -184,6 +182,27 @@ app.post("/cards/:cardId/comments", async (req, res) => {
 		data: { card_id: cardId, message, author },
 	});
 	res.status(201).json(comment);
+});
+
+// Toggle pin
+app.patch("/cards/:cardId/pin", async (req, res) => {
+	const cardId = Number(req.params.cardId);
+	try {
+		// Fetch current pin state
+		const existing = await prisma.card.findUnique({ where: { id: cardId } });
+		if (!existing) return res.status(404).json({ error: "Card not found" });
+
+		// If already pinned, unpin (set null), otherwise set to now()
+		const updated = await prisma.card.update({
+			where: { id: cardId },
+			data: { pinned_at: existing.pinned_at ? null : new Date() },
+		});
+
+		res.json(updated);
+	} catch (err) {
+		console.error("PATCH /cards/:cardId/pin", err);
+		res.status(500).json({ error: "Failed to toggle pin" });
+	}
 });
 
 // ——— CATCH-ALL 404 ——— //

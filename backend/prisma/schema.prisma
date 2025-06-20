@@ -27,6 +27,7 @@ model Card {
   author      String
   votes       Int      @default(0)
   created_at  DateTime @default(now())
+  pinned_at   DateTime?             
 
   board       Board    @relation(fields: [board_id], references: [id], onDelete: Cascade)
   comments    Comment[]
