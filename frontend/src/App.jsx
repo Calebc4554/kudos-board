@@ -105,6 +105,14 @@ export default function App() {
 	const categories = ["all", "recent", "celebration", "thank you", "inspiration"];
 	const navigate = useNavigate();
 
+	// THEME STATE
+	const [theme, setTheme] = useState(() => localStorage.getItem("theme") || "light");
+	useEffect(() => {
+		document.body.setAttribute("data-theme", theme);
+		localStorage.setItem("theme", theme);
+	}, [theme]);
+	const toggleTheme = () => setTheme((prev) => (prev === "light" ? "dark" : "light"));
+
 	useEffect(() => {
 		fetch(`${API}/boards`)
 			.then((res) => res.json())
@@ -221,7 +229,7 @@ export default function App() {
 						? {
 								...board,
 								cards: board.cards ? [{ ...newCard, pinned_at: null }, ...board.cards] : [newCard],
-						  }
+						}
 						: board
 				)
 			);
@@ -265,6 +273,13 @@ export default function App() {
 
 	return (
 		<div className="app">
+			<button
+				className="theme-toggle"
+				onClick={toggleTheme}
+				aria-label={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
+			>
+				{theme === "light" ? "🌙 Dark Mode" : "☀️ Light Mode"}
+			</button>
 			<main className="content-area">
 				<Routes>
 					<Route
