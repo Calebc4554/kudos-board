@@ -75,10 +75,10 @@ app.get("/boards/:boardId/cards", async (req, res) => {
 			where: { board_id: boardId },
 			orderBy: { created_at: "desc" },
 		});
-		const cards = rawCards.map((card, idx) => ({
-			...card,
-			id: idx + 1,
-		}));
+		const cards = await prisma.card.findMany({
+			where: { board_id: boardId },
+			orderBy: { created_at: "desc" },
+		});
 		res.json(cards);
 	} catch (err) {
 		console.error(`GET /boards/${boardId}/cards:`, err);
@@ -128,20 +128,22 @@ app.post("/boards/:boardId/cards", async (req, res) => {
 	}
 });
 
-// PATCH to upvote a card
+// PATCH upvote a card
 app.patch("/cards/:cardId/vote", async (req, res) => {
 	const cardId = Number(req.params.cardId);
 	try {
-		const card = await prisma.card.update({
+		const { count } = await prisma.card.updateMany({
 			where: { id: cardId },
 			data: { votes: { increment: 1 } },
 		});
-		res.json(card);
-	} catch (err) {
-		if (err.code === "P2025") {
+		if (count === 0) {
 			return res.status(404).json({ error: "Card not found" });
 		}
-		console.error(`PATCH /cards/${cardId}/vote:`, err);
+		// now fetch & return the updated card
+		const updated = await prisma.card.findUnique({ where: { id: cardId } });
+		res.json(updated);
+	} catch (err) {
+		console.error(`PATCH /cards/${cardId}/vote`, err);
 		res.status(500).json({ error: "Failed to upvote card" });
 	}
 });

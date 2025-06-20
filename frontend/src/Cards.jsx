@@ -8,7 +8,7 @@ function BoardDetails({ board, onDeleteCard, onUpvoteCard }) {
 		<div className="cards-container">
 			{board.cards.map((card) => (
 				<div key={card.id} className="card">
-					<img src={card.gif} alt={card.title} className="card-gif" />
+					<img src={card.gif || card.gif_url} alt={card.title} className="card-gif" />
 					<h3>{card.title}</h3>
 					<p>{card.description}</p>
 					<p className="card-author">

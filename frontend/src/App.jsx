@@ -8,9 +8,12 @@ import CreateCardModal from "./CreateCardModal";
 const API = import.meta.env.VITE_API_BASE_URL;
 
 export default function App() {
+	const [boards, setBoards] = useState([]);
+	const [selectedBoard, setSelectedBoard] = useState(null);
+	const [filter, setFilter] = useState("all");
+
 	const [showForm, setShowForm] = useState(false);
 	const [showCardModal, setShowCardModal] = useState(false);
-	const [showDetails, setShowDetails] = useState(false);
 
 	const [formData, setFormData] = useState({
 		title: "",
@@ -26,16 +29,13 @@ export default function App() {
 		author: "",
 	});
 
-	const [boards, setBoards] = useState([]);
-	const [selectedBoard, setSelectedBoard] = useState(null);
 	const categories = ["all", "recent", "celebration", "thank you", "inspiration"];
-	const [filter, setFilter] = useState("all");
 
 	useEffect(() => {
 		fetch(`${API}/boards`)
 			.then((res) => res.json())
 			.then(setBoards)
-			.catch(console.error);
+			.catch((err) => console.error("GET /boards failed:", err));
 	}, []);
 
 	const handleCreateBoard = async (e) => {
@@ -58,7 +58,7 @@ export default function App() {
 			setShowForm(false);
 			setFormData({ title: "", description: "", category: "celebration", image: "", author: "" });
 		} catch (err) {
-			console.error(err);
+			console.error("POST /boards failed:", err);
 		}
 	};
 
@@ -66,26 +66,33 @@ export default function App() {
 		try {
 			await fetch(`${API}/boards/${id}`, { method: "DELETE" });
 			setBoards((prev) => prev.filter((b) => b.id !== id));
-			handleBack();
+			if (selectedBoard?.id === id) handleBack();
 		} catch (err) {
-			console.error(err);
+			console.error(`DELETE /boards/${id} failed:`, err);
 		}
 	};
 
 	const handleViewBoard = async (board) => {
 		try {
 			const res = await fetch(`${API}/boards/${board.id}/cards`);
-			const cards = await res.json();
+			const rows = await res.json();
+			const cards = rows.map((c) => ({
+				id: c.id,
+				title: c.title,
+				description: c.description,
+				author: c.author,
+				gif: c.gif_url,
+				votes: c.votes,
+			}));
 			setSelectedBoard({ ...board, cards });
-			setShowDetails(true);
 		} catch (err) {
-			console.error(err);
+			console.error(`GET /boards/${board.id}/cards failed:`, err);
 		}
 	};
 
 	const handleBack = () => {
-		setShowDetails(false);
 		setSelectedBoard(null);
+		setShowCardModal(false);
 	};
 
 	const handleAddCard = async (e) => {
@@ -103,25 +110,31 @@ export default function App() {
 				body: JSON.stringify(payload),
 			});
 			const newCard = await res.json();
-			// update selected board
-			setSelectedBoard((prev) => ({ ...prev, cards: [newCard, ...prev.cards] }));
+			setSelectedBoard((prev) => ({
+				...prev,
+				cards: [newCard, ...prev.cards],
+			}));
 			setShowCardModal(false);
 			setCardFormData({ title: "", description: "", gif: "", author: "" });
 		} catch (err) {
-			console.error(err);
+			console.error(`POST /boards/${selectedBoard.id}/cards failed:`, err);
 		}
 	};
 
 	const handleUpvoteCard = async (cardId) => {
 		try {
-			const res = await fetch(`${API}/cards/${cardId}/vote`, { method: "PATCH" });
+			const res = await fetch(`${API}/cards/${cardId}/vote`, {
+				method: "PATCH",
+			});
+			if (!res.ok) throw new Error("Upvote failed");
 			const updated = await res.json();
-			setSelectedBoard((prev) => ({
-				...prev,
-				cards: prev.cards.map((c) => (c.id === cardId ? updated : c)),
+
+			setSelectedBoard((b) => ({
+				...b,
+				cards: b.cards.map((c) => (c.id === updated.id ? { ...c, votes: updated.votes } : c)),
 			}));
 		} catch (err) {
-			console.error(err);
+			console.error("handleUpvoteCard:", err);
 		}
 	};
 
@@ -133,7 +146,7 @@ export default function App() {
 				cards: prev.cards.filter((c) => c.id !== cardId),
 			}));
 		} catch (err) {
-			console.error(err);
+			console.error(`DELETE /cards/${cardId} failed:`, err);
 		}
 	};
 
@@ -143,7 +156,7 @@ export default function App() {
 		<div className="app">
 			<header className="header">
 				<h1>Kudos Board</h1>
-				{showDetails && (
+				{selectedBoard && (
 					<>
 						<button className="back-button" onClick={handleBack}>
 							← Back to Boards
@@ -155,11 +168,11 @@ export default function App() {
 				)}
 			</header>
 
-			{showDetails ? (
+			{selectedBoard ? (
 				<Cards
 					board={selectedBoard}
-					onDeleteCard={handleDeleteCard}
 					onUpvoteCard={handleUpvoteCard}
+					onDeleteCard={handleDeleteCard}
 				/>
 			) : (
 				<>
