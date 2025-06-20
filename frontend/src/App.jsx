@@ -24,7 +24,7 @@ function BoardCardsPage({
 	const navigate = useNavigate();
 
 	useEffect(() => {
-		const fetchCards = async () => {
+		async function fetchCards() {
 			const boardObj = boards.find((b) => String(b.id) === boardId);
 			if (!boardObj) return;
 			const res = await fetch(`${API}/boards/${boardId}/cards`);
@@ -46,7 +46,7 @@ function BoardCardsPage({
 					return new Date(b.created_at) - new Date(a.created_at);
 				});
 			setBoard({ ...boardObj, cards });
-		};
+		}
 		fetchCards();
 	}, [boardId, boards, showCardModal]);
 
@@ -105,15 +105,16 @@ export default function App() {
 	const categories = ["all", "recent", "celebration", "thank you", "inspiration"];
 	const navigate = useNavigate();
 
-	// Theme handling
-	const [theme, setTheme] = useState(() => localStorage.getItem("theme") || "light");
+	const [theme, setTheme] = useState("light");
+
 	useEffect(() => {
 		document.body.setAttribute("data-theme", theme);
-		localStorage.setItem("theme", theme);
 	}, [theme]);
-	const toggleTheme = () => setTheme((prev) => (prev === "light" ? "dark" : "light"));
 
-	// Load boards
+	const toggleTheme = () => {
+		setTheme((prev) => (prev === "light" ? "dark" : "light"));
+	};
+
 	useEffect(() => {
 		fetch(`${API}/boards`)
 			.then((res) => res.json())
@@ -121,7 +122,6 @@ export default function App() {
 			.catch((err) => console.error("GET /boards failed:", err));
 	}, []);
 
-	// Board CRUD
 	const handleCreateBoard = async (e) => {
 		e.preventDefault();
 		const payload = { ...formData, image_url: formData.image };
@@ -134,7 +134,13 @@ export default function App() {
 			const newBoard = await res.json();
 			setBoards((prev) => [newBoard, ...prev]);
 			setShowForm(false);
-			setFormData({ title: "", description: "", category: "celebration", image: "", author: "" });
+			setFormData({
+				title: "",
+				description: "",
+				category: "celebration",
+				image: "",
+				author: "",
+			});
 		} catch (err) {
 			console.error("POST /boards failed:", err);
 		}
@@ -149,7 +155,6 @@ export default function App() {
 		}
 	};
 
-	// Card handlers
 	const handleAddCard = async (e, boardId) => {
 		e.preventDefault();
 		const payload = { ...cardFormData };
@@ -165,7 +170,10 @@ export default function App() {
 			setBoards((prev) =>
 				prev.map((b) =>
 					b.id === boardId
-						? { ...b, cards: b.cards ? [{ ...newCard, pinned_at: null }, ...b.cards] : [newCard] }
+						? {
+								...b,
+								cards: b.cards ? [{ ...newCard, pinned_at: null }, ...b.cards] : [newCard],
+						  }
 						: b
 				)
 			);
@@ -178,7 +186,9 @@ export default function App() {
 
 	const handleUpvoteCard = async (cardId) => {
 		try {
-			const res = await fetch(`${API}/cards/${cardId}/vote`, { method: "PATCH" });
+			const res = await fetch(`${API}/cards/${cardId}/vote`, {
+				method: "PATCH",
+			});
 			if (!res.ok) throw new Error("Upvote failed");
 			const updated = await res.json();
 			setBoards((prev) =>
@@ -228,7 +238,6 @@ export default function App() {
 		);
 	};
 
-	// Filtering
 	let filteredByCategory;
 	if (filter === "all") filteredByCategory = boards;
 	else if (filter === "recent")
