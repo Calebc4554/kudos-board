@@ -8,7 +8,6 @@ export default function Cards({ board, onUpvoteCard, onDeleteCard, onTogglePin }
 	const [comments, setComments] = useState([]);
 	const [newComment, setNewComment] = useState({ message: "", author: "" });
 
-	// when we open a card, fetch its comments
 	useEffect(() => {
 		if (!openCard) return;
 		fetch(`${API}/cards/${openCard.id}/comments`)
@@ -34,16 +33,10 @@ export default function Cards({ board, onUpvoteCard, onDeleteCard, onTogglePin }
 
 	return (
 		<>
-			{/* cards grid */}
 			<div className="cards-container">
 				{board.cards.map((c) => (
 					<div key={c.id} className={`card${c.pinned_at ? " pinned" : ""}`}>
-						<img
-							src={c.gif || c.gif_url}
-							alt={c.title}
-							className="card-gif"
-							onClick={() => setOpenCard(c)}
-						/>
+						<img src={c.gif || c.gif_url} alt={c.title} className="card-gif" />
 						<h3>{c.title}</h3>
 						<p>{c.description}</p>
 						<p className="card-author">
@@ -57,6 +50,9 @@ export default function Cards({ board, onUpvoteCard, onDeleteCard, onTogglePin }
 								onClick={() => onTogglePin(c.id)}
 							>
 								📌
+							</button>
+							<button className="view-comments-button" onClick={() => setOpenCard(c)}>
+								💬 View Comments
 							</button>
 						</div>
 					</div>
@@ -80,10 +76,6 @@ export default function Cards({ board, onUpvoteCard, onDeleteCard, onTogglePin }
 						<p className="card-author">
 							<strong>By:</strong> {openCard.author || "Anonymous"}
 						</p>
-						<div className="card-actions">
-							<button onClick={() => onUpvoteCard(openCard.id)}>❤️ {openCard.votes}</button>
-							<button onClick={() => onDeleteCard(openCard.id)}>Delete</button>
-						</div>
 
 						<section className="comments-section">
 							<h3>Comments</h3>
@@ -112,7 +104,9 @@ export default function Cards({ board, onUpvoteCard, onDeleteCard, onTogglePin }
 									onChange={(e) => setNewComment((n) => ({ ...n, author: e.target.value }))}
 									placeholder="Author (optional)"
 								/>
-								<button type="submit">Add Comment</button>
+								<button type="submit" className="create-button">
+									Add Comment
+								</button>
 							</form>
 						</section>
 					</div>
