@@ -3,7 +3,7 @@ import "./Cards.css";
 
 const API = import.meta.env.VITE_API_BASE_URL;
 
-export default function Cards({ board, onUpvoteCard, onDeleteCard }) {
+export default function Cards({ board, onUpvoteCard, onDeleteCard, onTogglePin }) {
 	const [openCard, setOpenCard] = useState(null);
 	const [comments, setComments] = useState([]);
 	const [newComment, setNewComment] = useState({ message: "", author: "" });
@@ -37,7 +37,7 @@ export default function Cards({ board, onUpvoteCard, onDeleteCard }) {
 			{/* cards grid */}
 			<div className="cards-container">
 				{board.cards.map((c) => (
-					<div key={c.id} className="card">
+					<div key={c.id} className={`card${c.pinned_at ? " pinned" : ""}`}>
 						<img
 							src={c.gif || c.gif_url}
 							alt={c.title}
@@ -52,6 +52,12 @@ export default function Cards({ board, onUpvoteCard, onDeleteCard }) {
 						<div className="card-actions">
 							<button onClick={() => onUpvoteCard(c.id)}>❤️ {c.votes ?? 0}</button>
 							<button onClick={() => onDeleteCard(c.id)}>Delete</button>
+							<button
+								className={`pin-button ${c.pinned_at ? "pinned" : ""}`}
+								onClick={() => onTogglePin(c.id)}
+							>
+								📌
+							</button>
 						</div>
 					</div>
 				))}

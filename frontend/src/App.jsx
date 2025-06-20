@@ -73,22 +73,53 @@ export default function App() {
 			console.error(`DELETE /boards/${id} failed:`, err);
 		}
 	};
+	const handleTogglePin = async (cardId) => {
+		const res = await fetch(`${API}/cards/${cardId}/pin`, { method: "PATCH" });
+		const updated = await res.json();
+		// update selectedBoard.cards:
+		setSelectedBoard((b) => ({
+			...b,
+			cards: b.cards
+				.map((c) => (c.id === updated.id ? updated : c))
+				.sort((a, b) => {
+					// pinned first
+					if (!!a.pinned_at !== !!b.pinned_at) return b.pinned_at ? 1 : -1;
+					// among pinned, sort by pinned_at asc so oldest pin at top
+					if (a.pinned_at && b.pinned_at) return new Date(a.pinned_at) - new Date(b.pinned_at);
+					// else fallback to created_at desc
+					return new Date(b.created_at) - new Date(a.created_at);
+				}),
+		}));
+	};
 
 	const handleViewBoard = async (board) => {
 		try {
 			const res = await fetch(`${API}/boards/${board.id}/cards`);
 			const rows = await res.json();
-			const cards = rows.map((c) => ({
-				id: c.id,
-				title: c.title,
-				description: c.description,
-				author: c.author,
-				gif: c.gif_url,
-				votes: c.votes,
-			}));
+			const cards = rows
+				.map((c) => ({
+					id: c.id,
+					title: c.title,
+					description: c.description,
+					author: c.author,
+					gif: c.gif_url,
+					votes: c.votes,
+					pinned_at: c.pinned_at,
+					created_at: c.created_at,
+				}))
+				.sort((a, b) => {
+					if (!!a.pinned_at !== !!b.pinned_at) {
+						return b.pinned_at ? 1 : -1;
+					}
+					if (a.pinned_at && b.pinned_at) {
+						return new Date(b.pinned_at) - new Date(a.pinned_at);
+					}
+					return new Date(b.created_at) - new Date(a.created_at);
+				});
+
 			setSelectedBoard({ ...board, cards });
 		} catch (err) {
-			console.error(`GET /boards/${board.id}/cards failed:`, err);
+			console.error(err);
 		}
 	};
 
@@ -114,7 +145,10 @@ export default function App() {
 			const newCard = await res.json();
 			setSelectedBoard((prev) => ({
 				...prev,
-				cards: [newCard, ...prev.cards],
+				cards: [
+					{ ...newCard, pinned_at: null }, // unpinned by default
+					...prev.cards,
+				],
 			}));
 			setShowCardModal(false);
 			setCardFormData({ title: "", description: "", gif: "", author: "" });
@@ -244,6 +278,7 @@ export default function App() {
 					board={selectedBoard}
 					onUpvoteCard={handleUpvoteCard}
 					onDeleteCard={handleDeleteCard}
+					onTogglePin={handleTogglePin}
 				/>
 			) : (
 				<BoardList boards={displayBoards} onDelete={handleDeleteBoard} onView={handleViewBoard} />
