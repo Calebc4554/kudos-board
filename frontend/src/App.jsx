@@ -105,7 +105,7 @@ export default function App() {
 	const categories = ["all", "recent", "celebration", "thank you", "inspiration"];
 	const navigate = useNavigate();
 
-	// THEME STATE
+	// Theme handling
 	const [theme, setTheme] = useState(() => localStorage.getItem("theme") || "light");
 	useEffect(() => {
 		document.body.setAttribute("data-theme", theme);
@@ -113,6 +113,7 @@ export default function App() {
 	}, [theme]);
 	const toggleTheme = () => setTheme((prev) => (prev === "light" ? "dark" : "light"));
 
+	// Load boards
 	useEffect(() => {
 		fetch(`${API}/boards`)
 			.then((res) => res.json())
@@ -120,15 +121,10 @@ export default function App() {
 			.catch((err) => console.error("GET /boards failed:", err));
 	}, []);
 
+	// Board CRUD
 	const handleCreateBoard = async (e) => {
 		e.preventDefault();
-		const payload = {
-			title: formData.title,
-			description: formData.description,
-			category: formData.category,
-			image_url: formData.image,
-			author: formData.author,
-		};
+		const payload = { ...formData, image_url: formData.image };
 		try {
 			const res = await fetch(`${API}/boards`, {
 				method: "POST",
@@ -153,40 +149,44 @@ export default function App() {
 		}
 	};
 
-	const handleTogglePin = async (cardId) => {
-		const res = await fetch(`${API}/cards/${cardId}/pin`, { method: "PATCH" });
-		const updated = await res.json();
-		setBoards((prevBoards) =>
-			prevBoards.map((board) => ({
-				...board,
-				cards: board.cards
-					? board.cards
-							.map((c) => (c.id === updated.id ? updated : c))
-							.sort((a, b) => {
-								if (!!a.pinned_at !== !!b.pinned_at) return b.pinned_at ? 1 : -1;
-								if (a.pinned_at && b.pinned_at)
-									return new Date(a.pinned_at) - new Date(b.pinned_at);
-								return new Date(b.created_at) - new Date(a.created_at);
-							})
-					: board.cards,
-			}))
-		);
+	// Card handlers
+	const handleAddCard = async (e, boardId) => {
+		e.preventDefault();
+		const payload = { ...cardFormData };
+		delete payload.gif;
+		payload.gif_url = cardFormData.gif;
+		try {
+			const res = await fetch(`${API}/boards/${boardId}/cards`, {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify(payload),
+			});
+			const newCard = await res.json();
+			setBoards((prev) =>
+				prev.map((b) =>
+					b.id === boardId
+						? { ...b, cards: b.cards ? [{ ...newCard, pinned_at: null }, ...b.cards] : [newCard] }
+						: b
+				)
+			);
+			setShowCardModal(false);
+			setCardFormData({ title: "", description: "", gif: "", author: "" });
+		} catch (err) {
+			console.error(`POST /boards/${boardId}/cards failed:`, err);
+		}
 	};
 
 	const handleUpvoteCard = async (cardId) => {
 		try {
-			const res = await fetch(`${API}/cards/${cardId}/vote`, {
-				method: "PATCH",
-			});
+			const res = await fetch(`${API}/cards/${cardId}/vote`, { method: "PATCH" });
 			if (!res.ok) throw new Error("Upvote failed");
 			const updated = await res.json();
-
-			setBoards((prevBoards) =>
-				prevBoards.map((board) => ({
-					...board,
-					cards: board.cards
-						? board.cards.map((c) => (c.id === updated.id ? { ...c, votes: updated.votes } : c))
-						: board.cards,
+			setBoards((prev) =>
+				prev.map((b) => ({
+					...b,
+					cards: b.cards
+						? b.cards.map((c) => (c.id === updated.id ? { ...c, votes: updated.votes } : c))
+						: b.cards,
 				}))
 			);
 		} catch (err) {
@@ -197,10 +197,10 @@ export default function App() {
 	const handleDeleteCard = async (cardId) => {
 		try {
 			await fetch(`${API}/cards/${cardId}`, { method: "DELETE" });
-			setBoards((prevBoards) =>
-				prevBoards.map((board) => ({
-					...board,
-					cards: board.cards ? board.cards.filter((c) => c.id !== cardId) : board.cards,
+			setBoards((prev) =>
+				prev.map((b) => ({
+					...b,
+					cards: b.cards ? b.cards.filter((c) => c.id !== cardId) : b.cards,
 				}))
 			);
 		} catch (err) {
@@ -208,49 +208,34 @@ export default function App() {
 		}
 	};
 
-	const handleAddCard = async (e, boardId) => {
-		e.preventDefault();
-		const payload = {
-			title: cardFormData.title,
-			description: cardFormData.description,
-			gif_url: cardFormData.gif,
-			author: cardFormData.author,
-		};
-		try {
-			const res = await fetch(`${API}/boards/${boardId}/cards`, {
-				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify(payload),
-			});
-			const newCard = await res.json();
-			setBoards((prevBoards) =>
-				prevBoards.map((board) =>
-					board.id === boardId
-						? {
-								...board,
-								cards: board.cards ? [{ ...newCard, pinned_at: null }, ...board.cards] : [newCard],
-						}
-						: board
-				)
-			);
-			setShowCardModal(false);
-			setCardFormData({ title: "", description: "", gif: "", author: "" });
-		} catch (err) {
-			console.error(`POST /boards/${boardId}/cards failed:`, err);
-		}
+	const handleTogglePin = async (cardId) => {
+		const res = await fetch(`${API}/cards/${cardId}/pin`, { method: "PATCH" });
+		const updated = await res.json();
+		setBoards((prev) =>
+			prev.map((b) => ({
+				...b,
+				cards: b.cards
+					? b.cards
+							.map((c) => (c.id === updated.id ? updated : c))
+							.sort((a, b) => {
+								if (!!a.pinned_at !== !!b.pinned_at) return b.pinned_at ? 1 : -1;
+								if (a.pinned_at && b.pinned_at)
+									return new Date(a.pinned_at) - new Date(b.pinned_at);
+								return new Date(b.created_at) - new Date(a.created_at);
+							})
+					: b.cards,
+			}))
+		);
 	};
 
-	// Filtering logic
+	// Filtering
 	let filteredByCategory;
-	if (filter === "all") {
-		filteredByCategory = boards;
-	} else if (filter === "recent") {
+	if (filter === "all") filteredByCategory = boards;
+	else if (filter === "recent")
 		filteredByCategory = [...boards]
 			.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
 			.slice(0, 6);
-	} else {
-		filteredByCategory = boards.filter((b) => b.category === filter);
-	}
+	else filteredByCategory = boards.filter((b) => b.category.toLowerCase() === filter.toLowerCase());
 
 	const displayBoards = filteredByCategory.filter(
 		(b) =>
@@ -267,9 +252,7 @@ export default function App() {
 		setSearchQuery("");
 	};
 
-	const handleViewBoard = (board) => {
-		navigate(`/boards/${board.id}`);
-	};
+	const handleViewBoard = (board) => navigate(`/boards/${board.id}`);
 
 	return (
 		<div className="app">
@@ -280,6 +263,7 @@ export default function App() {
 			>
 				{theme === "light" ? "🌙 Dark Mode" : "☀️ Light Mode"}
 			</button>
+
 			<main className="content-area">
 				<Routes>
 					<Route
@@ -308,7 +292,11 @@ export default function App() {
 													key={cat}
 													type="button"
 													className={`filter-button ${filter === cat ? "active" : ""}`}
-													onClick={() => setFilter(cat)}
+													onClick={() => {
+														setFilter(cat);
+														setSearchTerm("");
+														setSearchQuery("");
+													}}
 												>
 													{cat.charAt(0).toUpperCase() + cat.slice(1)}
 												</button>
@@ -331,11 +319,13 @@ export default function App() {
 										</form>
 									</div>
 								</div>
+
 								<BoardList
 									boards={displayBoards}
 									onDelete={handleDeleteBoard}
 									onView={handleViewBoard}
 								/>
+
 								{showForm && (
 									<CreateBoardModal
 										formData={formData}
@@ -347,6 +337,7 @@ export default function App() {
 							</>
 						}
 					/>
+
 					<Route
 						path="/boards/:boardId"
 						element={
@@ -365,6 +356,7 @@ export default function App() {
 					/>
 				</Routes>
 			</main>
+
 			<footer className="footer">
 				<p>© 2025 Kudos Board. All rights reserved.</p>
 			</footer>
