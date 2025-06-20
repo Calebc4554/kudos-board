@@ -53,7 +53,7 @@ body {
 
 .search-container {
 	display: flex;
-	justify-content: center;
+	justify-content: flex-start;
 	padding: 0.25rem 1rem;
 }
 .search-container input {
@@ -64,7 +64,7 @@ body {
 	border-radius: 6px;
 	background: #2a0000;
 	color: #ffe8c4;
-	transition: border-color 0.2s ease, box-shadow 0.2s ease;
+	transition: border-color 0.2s, box-shadow 0.2s;
 }
 .search-container input:focus {
 	border-color: #ff7733;
@@ -108,30 +108,87 @@ body {
 	background-color: #100509;
 }
 
-.create-button {
+.board-item {
+	background-color: #2a0c13;
+	color: #ffe8c4;
+	padding: 1rem;
+	width: 300px;
+	border-radius: 10px;
+	border: 1px solid #800000;
+	box-shadow: 0 0 12px var(--magma-glow);
+	text-align: center;
+	transition: transform 0.1s, box-shadow 0.2s;
+}
+.board-item:hover {
+	transform: translateY(-4px);
+	box-shadow: 0 0 20px var(--magma-glow);
+}
+
+.board-image {
+	width: 100%;
+	height: 150px;
+	object-fit: cover;
+	border-radius: 6px;
+	border: 1px solid #800000;
+	box-shadow: inset 0 0 8px var(--magma-glow);
+}
+
+.author {
+	font-size: 0.85rem;
+	color: #ffe8c4;
+	margin-top: 0.5rem;
+	text-shadow: 0 0 4px var(--magma-glow);
+	text-align: center;
+}
+
+button.create-button {
 	display: inline-block;
 	margin: 1rem auto;
 	padding: 0.6rem 1.4rem;
-	background: #ff4500;
+	background-color: #ff4500;
 	color: #100509;
 	border: none;
 	border-radius: 6px;
-	box-shadow: 0 0 16px rgba(255, 69, 0, 0.8);
+	box-shadow: 0 0 16px var(--magma-glow);
 	cursor: pointer;
-	transition: background-color 0.2s, transform 0.1s;
+	transition: background-color 0.2s, transform 0.1s, box-shadow 0.2s;
 }
-.create-button:hover {
+button.create-button:hover {
 	background: #ff6a33;
 	transform: scale(1.05);
 	box-shadow: 0 0 20px rgba(255, 102, 51, 0.9);
 }
 
-.author {
-	font-size: 0.85rem;
-	color: #d3ab82;
+.delete-button {
 	margin-top: 0.5rem;
-	text-align: center;
-	text-shadow: 0 0 4px rgba(255, 102, 51, 0.6);
+	padding: 0.4rem 1rem;
+	background-color: #ff4500;
+	color: #ffe8c4;
+	border: none;
+	border-radius: 6px;
+	box-shadow: 0 0 8px var(--magma-glow);
+	cursor: pointer;
+	transition: background-color 0.2s, box-shadow 0.2s;
+}
+.delete-button:hover {
+	background: #ff6a33;
+	box-shadow: 0 0 12px var(--magma-glow);
+}
+
+.view-button {
+	margin-top: 0.5rem;
+	padding: 0.4rem 1rem;
+	background-color: #ff4500;
+	color: #ffe8c4;
+	border: none;
+	border-radius: 6px;
+	box-shadow: 0 0 8px var(--magma-glow);
+	cursor: pointer;
+	transition: background-color 0.2s, box-shadow 0.2s;
+}
+.view-button:hover {
+	background: #ff6a33;
+	box-shadow: 0 0 12px var(--magma-glow);
 }
 
 .footer {

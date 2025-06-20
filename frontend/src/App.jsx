@@ -222,7 +222,7 @@ export default function App() {
 		<div className="app">
 			<div className="top-container">
 				<header className="header">
-					<h1>Kudos Board</h1>
+					<h1>MagmaBoard 🔥</h1>
 
 					{selectedBoard && (
 						<div className="header-actions">
@@ -243,8 +243,8 @@ export default function App() {
 				{!selectedBoard && (
 					<div className="controls">
 						<section className="banner">
-							<h2>Celebrate Your Team 🎉</h2>
-							<p>Create, filter, and manage your kudos boards below.</p>
+							<h2>Where recognition erupts</h2>
+							<p>Channel every win through molten applause</p>
 							<button type="button" className="create-button" onClick={() => setShowForm(true)}>
 								+ Create New Board
 							</button>
