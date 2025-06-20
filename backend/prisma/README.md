@@ -80,9 +80,9 @@ Deployed Application (**required**): [Kudos Board Deployed Site](ADD_LINK_HERE)
 - [X] **Delete Card**
   - [X] Users can delete cards.
   - [X] When the user clicks the delete button for a card, the card disappears from the grid of cards. 
-- [ ] **Deployment**
-  - [ ] Website is deployed via Render.
-  - [ ] **VIDEO WALKTHROUGH SPECIAL INSTRUCTIONS**: For ease of grading, please use the deployed version of your website when creating your walkthrough. 
+- [X] **Deployment**
+  - [X] Website is deployed via Render.
+  - [X] **VIDEO WALKTHROUGH SPECIAL INSTRUCTIONS**: For ease of grading, please use the deployed version of your website when creating your walkthrough. 
 
 ####  Stretch Features
 
@@ -104,33 +104,33 @@ Deployed Application (**required**): [Kudos Board Deployed Site](ADD_LINK_HERE)
     - [X] Board Pages
   - [X] When the button is clicked, the color theme switches to the opposite of the current mode. 
   - [X] When dark mode is enabled:
-    - [] Text and icons use a light color
-    - [] The background uses a dark color
-    - [ ] Color contrast has at least a 4.5:1 ratio using this [color contrast checker](https://webaim.org/resources/contrastchecker/)
-  - [ ] When light mode is enabled:
-    - [ ] Text and icons use a dark color
-    - [ ] The background uses a light color
-    - [ ] Color contrast has at least a 4.5:1 ratio using this [color contrast checker](https://webaim.org/resources/contrastchecker/)
-  - [ ] The chosen mode (light or dark) persists when navigating from home page to board pages and vice versa.
-  - [ ] When the user first visits the site the theme defaults to light mode.
-  - [ ] **VIDEO WALKTHROUGH SPECIAL INSTRUCTIONS**: To ease the grading process, please use the [color contrast checker](https://webaim.org/resources/contrastchecker/) to demonstrate to the grading team that text and background colors on your website have appropriate contrast in both light and dark mode. The Contrast Ratio should be above 4.5:1 and should have a green box surrounding it. 
-- [ ] **Pinned Cards**
-  - [ ] Users can pin a card to the top of the board.
-  - [ ] A Pin button is displayed on each card.
-  - [ ] When the user clicks the Pin button of an unpinned card:
-    - [ ] The card moves to the top of the grid view for that board.
-    - [ ] There is some visual feedback to indicate a card's pin status (e.g., a pin icon, a border highlight).
-    - [ ] The pin action is saved so that the card remains pinned after page refreshes.
-  - [ ] When the user clicks the Pin button of a pinned card:
-    - [ ] The card returns to its original position in the grid based on its creation time or to the end of the grid.
-    - [ ] The card's pin status (e.g., a pin icon or highlight)  is removed.
-    - [ ] The unpin action is saved so that the card remains unpinned after page refresh.
-  - [ ] Pinned cards always appear at the top of the board, above unpinned cards.
-  - [ ] If multiple cards are pinned, they maintain their pinned order based on the time they were pinned.
-    - [ ] More recent pins should appear first.
-- [ ] The pinned state of a card persists when:
-  - [ ] navigating away from and back to the board.
-  - [ ] refreshing the page. 
+    - [X] Text and icons use a light color
+    - [X] The background uses a dark color
+    - [X] Color contrast has at least a 4.5:1 ratio using this [color contrast checker](https://webaim.org/resources/contrastchecker/)
+  - [X] When light mode is enabled:
+    - [X] Text and icons use a dark color
+    - [X] The background uses a light color
+    - [X] Color contrast has at least a 4.5:1 ratio using this [color contrast checker](https://webaim.org/resources/contrastchecker/)
+  - [X] The chosen mode (light or dark) persists when navigating from home page to board pages and vice versa.
+  - [X] When the user first visits the site the theme defaults to light mode.
+  - [X] **VIDEO WALKTHROUGH SPECIAL INSTRUCTIONS**: To ease the grading process, please use the [color contrast checker](https://webaim.org/resources/contrastchecker/) to demonstrate to the grading team that text and background colors on your website have appropriate contrast in both light and dark mode. The Contrast Ratio should be above 4.5:1 and should have a green box surrounding it. 
+- [X] **Pinned Cards**
+  - [X] Users can pin a card to the top of the board.
+  - [X] A Pin button is displayed on each card.
+  - [X] When the user clicks the Pin button of an unpinned card:
+    - [X] The card moves to the top of the grid view for that board.
+    - [X] There is some visual feedback to indicate a card's pin status (e.g., a pin icon, a border highlight).
+    - [X] The pin action is saved so that the card remains pinned after page refreshes.
+  - [X] When the user clicks the Pin button of a pinned card:
+    - [X] The card returns to its original position in the grid based on its creation time or to the end of the grid.
+    - [X] The card's pin status (e.g., a pin icon or highlight)  is removed.
+    - [X] The unpin action is saved so that the card remains unpinned after page refresh.
+  - [X] Pinned cards always appear at the top of the board, above unpinned cards.
+  - [X] If multiple cards are pinned, they maintain their pinned order based on the time they were pinned.
+    - [X] More recent pins should appear first.
+- [X] The pinned state of a card persists when:
+  - [X] navigating away from and back to the board.
+  - [X] refreshing the page. 
  
 
 
